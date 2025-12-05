@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanmugavel B - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>Sanmugavel B</span>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active" data-section="home">
+                    <i class="fas fa-home"></i> Home
+                </a></li>
+                <li><a href="#about" class="nav-link" data-section="about">
+                    <i class="fas fa-user"></i> About
+                </a></li>
+                <li><a href="#education" class="nav-link" data-section="education">
+                    <i class="fas fa-graduation-cap"></i> Education
+                </a></li>
+                <li><a href="#experience" class="nav-link" data-section="experience">
+                    <i class="fas fa-briefcase"></i> Experience
+                </a></li>
+                <li><a href="#projects" class="nav-link" data-section="projects">
+                    <i class="fas fa-laptop-code"></i> Projects
+                </a></li>
+                <li><a href="#skills" class="nav-link" data-section="skills">
+                    <i class="fas fa-tools"></i> Skills
+                </a></li>
+                <li><a href="#contact" class="nav-link" data-section="contact">
+                    <i class="fas fa-envelope"></i> Contact
+                </a></li>
+            </ul>
+            <div class="nav-actions">
+                <span id="userDisplay" class="user-display"></span>
+                <button class="btn btn-secondary btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">Hi, I'm <span class="gradient-text">Sanmugavel B</span></h1>
+                        <p class="hero-subtitle">Full Stack Developer | AI Enthusiast | Problem Solver</p>
+                        <p class="hero-description">
+                            Passionate about building innovative solutions and exploring cutting-edge technologies.
+                            Specializing in web development, machine learning, and creating impactful digital experiences.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="#projects" class="btn btn-primary btn-lg" onclick="navigateToSection('projects')">
+                                <i class="fas fa-rocket"></i> View Projects
+                            </a>
+                            <a href="#contact" class="btn btn-secondary btn-lg" onclick="navigateToSection('contact')">
+                                <i class="fas fa-paper-plane"></i> Get In Touch
+                            </a>
+                        </div>
+                        <div class="social-links">
+                            <a href="https://github.com/Sanmugavel1" target="_blank" class="social-link">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/sanmugavel-b-118225326/" target="_blank" class="social-link">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="mailto:sanmugavelbl@gmail.com" class="social-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <div class="image-placeholder" id="profileImage">
+                            <i class="fas fa-user-circle"></i>
+                            <p>Your Photo Here</p>
+                            <button class="btn btn-primary btn-sm admin-only" onclick="uploadProfileImage()">
+                                <i class="fas fa-camera"></i> Upload Photo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="section-header">
+                <h1>About Me</h1>
+                <button class="btn btn-primary admin-only" onclick="openEditModal('about')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+            </div>
+            <div class="about-content" id="aboutContent">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="section">
+            <div class="section-header">
+                <h1>Education</h1>
+                <button class="btn btn-primary admin-only" onclick="openAddModal('education')">
+                    <i class="fas fa-plus"></i> Add Education
+                </button>
+            </div>
+            <div class="education-list" id="educationList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="section">
+            <div class="section-header">
+                <h1>Experience</h1>
+                <button class="btn btn-primary admin-only" onclick="openAddModal('experience')">
+                    <i class="fas fa-plus"></i> Add Experience
+                </button>
+            </div>
+            <div class="experience-list" id="experienceList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <div class="section-header">
+                <h1>Projects</h1>
+                <button class="btn btn-primary admin-only" onclick="openAddModal('project')">
+                    <i class="fas fa-plus"></i> Add Project
+                </button>
+            </div>
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section">
+            <div class="section-header">
+                <h1>Skills & Technologies</h1>
+                <button class="btn btn-primary admin-only" onclick="openAddModal('skill')">
+                    <i class="fas fa-plus"></i> Add Skill
+                </button>
+            </div>
+            <div class="skills-container" id="skillsContainer">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="section-header">
+                <h1>Get In Touch</h1>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>sanmugavelbl@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <div>
+                            <h4>LinkedIn</h4>
+                            <a href="https://www.linkedin.com/in/sanmugavel-b-118225326/" target="_blank">linkedin.com/in/sanmugavel-b</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <div>
+                            <h4>GitHub</h4>
+                            <a href="https://github.com/Sanmugavel1" target="_blank">github.com/Sanmugavel1</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Send Me a Message</h3>
+                    <form onsubmit="handleContactForm(event)">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content detail-modal-content" id="detailModalContent">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
