@@ -448,7 +448,15 @@ function loadProfileImage() {
    // alert('Thank you for your message! I will get back to you soon.');
   //  e.target.reset();
 //}
-
+// Check for success parameter
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+        alert('✅ Thank you! Your message has been sent successfully. I\'ll get back to you soon!');
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+});
 // CRUD Operations
 function openAddModal(type) {
     const modal = document.getElementById('modal');
@@ -1135,5 +1143,6 @@ window.addEventListener('click', (e) => {
     }
 
 });
+
 
 
