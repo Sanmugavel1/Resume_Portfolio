@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'https://resume-portfolio-sanmugavelb.onrender.com/api/portfolio';
+const API_BASE_URL = 'https://resume-portfolio-sanmugavelb.onrender.com/api';
 
 // Global State
 let currentUser = null;
@@ -1135,3 +1135,4 @@ window.addEventListener('click', (e) => {
     }
 
 });
+
