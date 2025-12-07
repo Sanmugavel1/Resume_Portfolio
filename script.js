@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://resume-portfolio-sanmugavelb.onrender.com/api/portfolio';
 
 // Global State
 let currentUser = null;
@@ -1133,4 +1133,5 @@ window.addEventListener('click', (e) => {
     if (e.target === detailModal) {
         closeDetailModal();
     }
+
 });
