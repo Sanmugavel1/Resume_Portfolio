@@ -443,11 +443,11 @@ function loadProfileImage() {
 }
 
 // Contact Form
-function handleContactForm(e) {
-    e.preventDefault();
-    alert('Thank you for your message! I will get back to you soon.');
-    e.target.reset();
-}
+//function handleContactForm(e) {
+//    e.preventDefault();
+   // alert('Thank you for your message! I will get back to you soon.');
+  //  e.target.reset();
+//}
 
 // CRUD Operations
 function openAddModal(type) {
@@ -1135,4 +1135,5 @@ window.addEventListener('click', (e) => {
     }
 
 });
+
 
