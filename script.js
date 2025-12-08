@@ -125,6 +125,21 @@ function renderAbout() {
                 </div>
             `).join('')}
         </div>
+        
+        <!-- ADD RESUME BUTTONS HERE -->
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--color-border);">
+            <h3 style="margin-bottom: 1.5rem; color: var(--color-text); font-size: 1.5rem;">
+                <i class="fas fa-file-alt"></i> My Resume
+            </h3>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="Sanmugavel_Resume.pdf" download class="btn btn-primary btn-lg">
+                    <i class="fas fa-download"></i> Download Resume
+                </a>
+                <a href="Sanmugavel_Resume.pdf" target="_blank" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-eye"></i> View Resume
+                </a>
+            </div>
+        </div>
     `;
 }
 
@@ -1143,6 +1158,7 @@ window.addEventListener('click', (e) => {
     }
 
 });
+
 
 
 
