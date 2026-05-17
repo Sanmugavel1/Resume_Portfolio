@@ -1159,6 +1159,36 @@ window.addEventListener('click', (e) => {
 
 });
 
+/* ═══════════════════════════════════════════════════════
+   BUTTON RIPPLE & MOUSE-TRACK GLOW (enhancement only)
+   ═══════════════════════════════════════════════════════ */
+(function initButtonEffects() {
+    // Ripple on every button click
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.btn, .tab-btn, .btn-primary, .btn-visitor, .social-link');
+        if (!btn) return;
 
+        const circle = document.createElement('span');
+        circle.classList.add('ripple');
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        circle.style.cssText = `
+            width:${size}px; height:${size}px;
+            left:${e.clientX - rect.left - size/2}px;
+            top:${e.clientY - rect.top  - size/2}px;
+        `;
+        btn.appendChild(circle);
+        circle.addEventListener('animationend', () => circle.remove());
+    }, true);
 
-
+    // Mouse-track radial glow on project cards
+    document.addEventListener('mousemove', function(e) {
+        const card = e.target.closest('.project-card, .card');
+        if (!card) return;
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1);
+        const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
+        card.style.setProperty('--mx', x + '%');
+        card.style.setProperty('--my', y + '%');
+    });
+})();
