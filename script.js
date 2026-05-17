@@ -1159,36 +1159,267 @@ window.addEventListener('click', (e) => {
 
 });
 
-/* ═══════════════════════════════════════════════════════
-   BUTTON RIPPLE & MOUSE-TRACK GLOW (enhancement only)
-   ═══════════════════════════════════════════════════════ */
-(function initButtonEffects() {
-    // Ripple on every button click
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.btn, .tab-btn, .btn-primary, .btn-visitor, .social-link');
-        if (!btn) return;
 
-        const circle = document.createElement('span');
-        circle.classList.add('ripple');
-        const rect = btn.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        circle.style.cssText = `
-            width:${size}px; height:${size}px;
-            left:${e.clientX - rect.left - size/2}px;
-            top:${e.clientY - rect.top  - size/2}px;
-        `;
-        btn.appendChild(circle);
-        circle.addEventListener('animationend', () => circle.remove());
-    }, true);
 
-    // Mouse-track radial glow on project cards
-    document.addEventListener('mousemove', function(e) {
-        const card = e.target.closest('.project-card, .card');
-        if (!card) return;
-        const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width  * 100).toFixed(1);
-        const y = ((e.clientY - rect.top)  / rect.height * 100).toFixed(1);
-        card.style.setProperty('--mx', x + '%');
-        card.style.setProperty('--my', y + '%');
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   CIRCUIT CANVAS + CUSTOM CURSOR + SCROLL REVEAL + TYPEWRITER
+   (ported from reference design — no existing logic changed)
+   ═══════════════════════════════════════════════════════════════════ */
+
+(function initVisualEnhancements() {
+
+  /* ── 1. INJECT CANVAS & CURSOR ELEMENTS ─────────────────────── */
+  function injectDOMElements() {
+    // Canvas
+    if (!document.getElementById('circuit-canvas')) {
+      const canvas = document.createElement('canvas');
+      canvas.id = 'circuit-canvas';
+      document.body.insertBefore(canvas, document.body.firstChild);
+    }
+    // Custom cursor
+    if (!document.getElementById('cursor')) {
+      const cur = document.createElement('div'); cur.id = 'cursor';
+      const trail = document.createElement('div'); trail.id = 'cursor-trail';
+      document.body.appendChild(cur);
+      document.body.appendChild(trail);
+    }
+  }
+
+  /* ── 2. CIRCUIT CANVAS ANIMATION ────────────────────────────── */
+  function initCircuitCanvas() {
+    const canvas = document.getElementById('circuit-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const ACCENT  = '#00e5c8';
+    const ACCENT2 = '#0099ff';
+    const NODE_COUNT = 55;
+
+    let W, H, nodes, edges;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function createNodes() {
+      nodes = Array.from({ length: NODE_COUNT }, () => ({
+        x:  Math.random() * W,
+        y:  Math.random() * H,
+        vx: (Math.random() - .5) * .35,
+        vy: (Math.random() - .5) * .35,
+        r:  Math.random() * 1.8 + .5,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * .02 + .008,
+      }));
+    }
+
+    function buildEdges() {
+      edges = [];
+      const DIST = Math.min(W, H) * .22;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          if (Math.sqrt(dx*dx + dy*dy) < DIST) edges.push([i, j]);
+        }
+      }
+    }
+
+    // Flowing "signal" packets along edges
+    const packets = [];
+    function spawnPacket() {
+      if (edges.length === 0) return;
+      const edge = edges[Math.floor(Math.random() * edges.length)];
+      packets.push({ edge, t: 0, speed: Math.random() * .004 + .002, color: Math.random() > .5 ? ACCENT : ACCENT2 });
+    }
+    setInterval(spawnPacket, 220);
+
+    function draw(ts) {
+      ctx.clearRect(0, 0, W, H);
+
+      // Move nodes
+      nodes.forEach(n => {
+        n.x += n.vx; n.y += n.vy;
+        n.pulse += n.pulseSpeed;
+        if (n.x < 0 || n.x > W) n.vx *= -1;
+        if (n.y < 0 || n.y > H) n.vy *= -1;
+      });
+
+      // Rebuild edges occasionally (cheaper: every 60 frames)
+      if (Math.floor(ts / 16) % 60 === 0) buildEdges();
+
+      // Draw edges
+      edges.forEach(([i, j]) => {
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const DIST = Math.min(W, H) * .22;
+        const alpha = (1 - dist / DIST) * .18;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = `rgba(0,229,200,${alpha})`;
+        ctx.lineWidth = .6;
+        ctx.stroke();
+      });
+
+      // Draw packets
+      for (let p = packets.length - 1; p >= 0; p--) {
+        const pkt = packets[p];
+        pkt.t += pkt.speed;
+        if (pkt.t > 1) { packets.splice(p, 1); continue; }
+        const [i, j] = pkt.edge;
+        const a = nodes[i], b = nodes[j];
+        const px = a.x + (b.x - a.x) * pkt.t;
+        const py = a.y + (b.y - a.y) * pkt.t;
+        ctx.beginPath();
+        ctx.arc(px, py, 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = pkt.color;
+        ctx.shadowColor = pkt.color;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // Draw nodes
+      nodes.forEach(n => {
+        const glow = (Math.sin(n.pulse) + 1) / 2;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r + glow * .8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0,229,200,${.25 + glow * .35})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); createNodes(); buildEdges(); });
+    resize();
+    createNodes();
+    buildEdges();
+    requestAnimationFrame(draw);
+  }
+
+  /* ── 3. CUSTOM CURSOR ───────────────────────────────────────── */
+  function initCursor() {
+    const cur   = document.getElementById('cursor');
+    const trail = document.getElementById('cursor-trail');
+    if (!cur || !trail) return;
+
+    let mx = 0, my = 0, tx = 0, ty = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px';
+      cur.style.top  = my + 'px';
     });
+
+    // Smooth trail
+    (function tickTrail() {
+      tx += (mx - tx) * .12;
+      ty += (my - ty) * .12;
+      trail.style.left = tx + 'px';
+      trail.style.top  = ty + 'px';
+      requestAnimationFrame(tickTrail);
+    })();
+
+    // Hide on leave, show on enter
+    document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; trail.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { cur.style.opacity = '1'; trail.style.opacity = '1'; });
+  }
+
+  /* ── 4. SCROLL REVEAL ───────────────────────────────────────── */
+  function initScrollReveal() {
+    // Tag all section children as reveal targets if not already
+    document.querySelectorAll('.card, .skill-item, .about-content, .contact-item, .contact-form, .section-header').forEach(el => {
+      if (!el.classList.contains('reveal')) el.classList.add('reveal');
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: .12 });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+
+  /* ── 5. SKILL BAR FILL ──────────────────────────────────────── */
+  function initSkillBars() {
+    const bars = document.querySelectorAll('.skill-bar-fill');
+    if (!bars.length) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.width = e.target.dataset.pct || '80%';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: .3 });
+    bars.forEach(b => io.observe(b));
+  }
+
+  /* ── 6. TYPEWRITER on hero subtitle ────────────────────────── */
+  function initTypewriter() {
+    const el = document.querySelector('.hero-subtitle');
+    if (!el) return;
+    const phrases = [
+      'ECE Student @ MIT Anna University',
+      'Full Stack Developer',
+      'AI & ML Enthusiast',
+      'Hackathon Explorer',
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    const base = el.textContent || '';
+    el.innerHTML = '<span class="tw-text"></span><span class="type-cursor">|</span>';
+    const tw = el.querySelector('.tw-text');
+
+    function tick() {
+      const phrase = phrases[pi];
+      if (!deleting) {
+        tw.textContent = phrase.slice(0, ++ci);
+        if (ci >= phrase.length) { deleting = true; setTimeout(tick, 1800); return; }
+        setTimeout(tick, 55);
+      } else {
+        tw.textContent = phrase.slice(0, --ci);
+        if (ci <= 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 400); return; }
+        setTimeout(tick, 28);
+      }
+    }
+    tick();
+  }
+
+  /* ── 7. OSCILLOSCOPE WAVE DIVIDER ───────────────────────────── */
+  function injectWaveDivider() {
+    const hero = document.getElementById('home');
+    if (!hero) return;
+    const div = document.createElement('div');
+    div.className = 'scope-divider';
+    div.innerHTML = `<svg viewBox="0 0 1200 60" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="0,30 60,30 80,10 100,50 120,10 140,50 160,30 300,30 320,5 340,55 360,5 380,55 400,30 600,30 620,12 640,48 660,12 680,48 700,30 900,30 920,8 940,52 960,8 980,52 1000,30 1200,30"
+        stroke="#00e5c8" stroke-width="1.2" stroke-linejoin="round" opacity="0.6"/>
+    </svg>`;
+    hero.after(div);
+  }
+
+  /* ── BOOT ─────────────────────────────────────────────────── */
+  function boot() {
+    injectDOMElements();
+    initCircuitCanvas();
+    initCursor();
+    initScrollReveal();
+    initSkillBars();
+    initTypewriter();
+    injectWaveDivider();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
 })();
