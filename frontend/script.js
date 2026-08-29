@@ -19,11 +19,16 @@ let portfolioData = {};
 
   // Particle canvas
   const ctx = canvas.getContext('2d');
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
+  // Use documentElement.clientWidth/Height, not window.innerWidth/innerHeight:
+  // on mobile, a fixed/absolute element sized via CSS width:100% resolves
+  // against the layout viewport, and reading window.innerWidth back into a
+  // canvas.width here created a feedback loop that slowly grew the page
+  // wider than the device (broken mobile layout, horizontal drift).
+  canvas.width  = document.documentElement.clientWidth;
+  canvas.height = document.documentElement.clientHeight;
   window.addEventListener('resize', () => {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width  = document.documentElement.clientWidth;
+    canvas.height = document.documentElement.clientHeight;
   });
 
   const ACCENT = '#00e5c8', ACCENT2 = '#0099ff';
@@ -937,7 +942,7 @@ function initCircuitCanvas() {
   const ctx=canvas.getContext('2d');
   const ACCENT='#00e5c8', ACCENT2='#0099ff', NODE_COUNT=55;
   let W,H,nodes,edges;
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  function resize(){W=canvas.width=document.documentElement.clientWidth;H=canvas.height=document.documentElement.clientHeight;}
   function createNodes(){nodes=Array.from({length:NODE_COUNT},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+.5,pulse:Math.random()*Math.PI*2,pulseSpeed:Math.random()*.02+.008}));}
   function buildEdges(){edges=[];const DIST=Math.min(W,H)*.22;for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y;if(Math.sqrt(dx*dx+dy*dy)<DIST)edges.push([i,j]);}}
   const packets=[];
