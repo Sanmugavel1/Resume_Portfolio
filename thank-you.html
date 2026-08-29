@@ -4,134 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You - Message Sent!</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        /* ── THANK-YOU PAGE — built on top of the shared VLSI theme (styles.css) ── */
+        body.ty-page {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #4facfe 50%, #00c6ff 75%, #0072ff 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            padding: clamp(1rem, 5vw, 2.5rem);
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        .ty-shell { position: relative; z-index: 1; width: 100%; max-width: 500px; }
 
-        .success-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 60px 40px;
+        .ty-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--color-border-bright);
+            border-radius: var(--radius-2xl);
+            padding: clamp(2.25rem, 7vw, 3.5rem) clamp(1.75rem, 6vw, 3rem);
             text-align: center;
-            max-width: 500px;
-            animation: slideUp 0.6s ease;
+            box-shadow: var(--shadow-xl), var(--glow-soft);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp .5s ease;
         }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .ty-pins { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.75rem; }
+        .ty-pins span {
+            width: 26px; height: 4px; border-radius: 2px;
+            background: linear-gradient(90deg, #00e5c8, #0099ff);
+            opacity: .55;
+            animation: pinBlink 1.8s ease infinite alternate;
         }
+        .ty-pins span:nth-child(1){animation-delay:0s}
+        .ty-pins span:nth-child(2){animation-delay:.15s}
+        .ty-pins span:nth-child(3){animation-delay:.3s}
+        .ty-pins span:nth-child(4){animation-delay:.45s}
+        .ty-pins span:nth-child(5){animation-delay:.6s}
+        .ty-pins span:nth-child(6){animation-delay:.75s}
 
-        .success-icon {
-            font-size: 80px;
-            color: #10b981;
-            margin-bottom: 20px;
-            animation: checkmark 0.6s ease;
+        .ty-icon {
+            font-size: clamp(3.4rem, 10vw, 4.2rem);
+            color: var(--color-success);
+            margin-bottom: 1.25rem;
+            filter: drop-shadow(0 0 16px rgba(34,211,94,.5));
+            animation: checkmark .6s ease;
         }
-
         @keyframes checkmark {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        h1 {
-            font-size: 2.5rem;
+        .ty-title {
+            font-family: var(--font-head);
+            font-size: clamp(1.7rem, 6vw, 2.3rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #0072ff);
+            margin-bottom: 1rem;
+            background: var(--gradient-success);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
         }
 
-        p {
-            color: #64748b;
-            font-size: 1.125rem;
+        .ty-copy {
+            color: var(--color-text-secondary);
+            font-size: clamp(.92rem, 2.2vw, 1.02rem);
             line-height: 1.8;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
+        .ty-copy .highlight { color: var(--color-primary); }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #667eea, #0072ff);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
+        .ty-card .btn { width: 100%; justify-content: center; }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        .ty-countdown {
+            margin-top: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: .78rem;
+            color: var(--color-text-secondary);
+            letter-spacing: .05em;
         }
-
-        .countdown {
-            margin-top: 20px;
-            font-size: 0.875rem;
-            color: #94a3b8;
-        }
+        .ty-countdown span#timer { color: var(--color-primary); font-weight: 700; }
     </style>
 </head>
-<body>
-    <div class="success-container">
-        <div class="success-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <h1>Message Sent!</h1>
-        <p>
-            Thank you for reaching out! 🎉<br>
-            Your message has been successfully delivered to Sanmugavel.<br>
-            I'll get back to you as soon as possible!
-        </p>
-        <a href="index.html" class="btn">
-            <i class="fas fa-arrow-left"></i>
-            Back to Portfolio
-        </a>
-        <div class="countdown" id="countdown">
-            Redirecting in <span id="timer">5</span> seconds...
+<body class="ty-page">
+
+    <div class="ty-shell">
+        <div class="ty-card">
+            <div class="ty-pins" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <i class="fas fa-check-circle ty-icon"></i>
+            <h1 class="ty-title">Message Sent!</h1>
+            <p class="ty-copy">
+                Thank you for reaching out 🎉<br>
+                Your message has been delivered to <span class="highlight">Sanmugavel</span>.<br>
+                I'll get back to you as soon as possible!
+            </p>
+            <a href="index.html" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-left"></i> Back to Portfolio
+            </a>
+            <div class="ty-countdown">
+                Redirecting in <span id="timer">5</span> seconds…
+            </div>
         </div>
     </div>
 
@@ -139,11 +116,11 @@
         // Auto redirect after 5 seconds
         let seconds = 5;
         const timerElement = document.getElementById('timer');
-        
+
         const countdown = setInterval(() => {
             seconds--;
             timerElement.textContent = seconds;
-            
+
             if (seconds <= 0) {
                 clearInterval(countdown);
                 window.location.href = 'index.html';

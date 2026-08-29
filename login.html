@@ -4,399 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Login - Sanmugavel B</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        /* ── AUTH PAGE — built on top of the shared VLSI theme (styles.css) ── */
+        body.auth-page {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #4facfe 50%, #00c6ff 75%, #0072ff 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            overflow: hidden;
+            padding: clamp(1rem, 5vw, 2.5rem);
+        }
+
+        .auth-shell { position: relative; z-index: 1; width: 100%; max-width: 460px; }
+
+        .auth-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--color-border-bright);
+            border-radius: var(--radius-2xl);
+            padding: clamp(1.75rem, 6vw, 2.75rem) clamp(1.5rem, 6vw, 2.5rem);
+            box-shadow: var(--shadow-xl), var(--glow-soft);
             position: relative;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
             overflow: hidden;
-            z-index: 0;
+            animation: slideUp .5s ease;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+        .auth-pins { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.75rem; }
+        .auth-pins span {
+            width: 26px; height: 4px; border-radius: 2px;
+            background: linear-gradient(90deg, #00e5c8, #0099ff);
+            opacity: .55;
+            animation: pinBlink 1.8s ease infinite alternate;
+        }
+        .auth-pins span:nth-child(1){animation-delay:0s}
+        .auth-pins span:nth-child(2){animation-delay:.15s}
+        .auth-pins span:nth-child(3){animation-delay:.3s}
+        .auth-pins span:nth-child(4){animation-delay:.45s}
+        .auth-pins span:nth-child(5){animation-delay:.6s}
+        .auth-pins span:nth-child(6){animation-delay:.75s}
+
+        .auth-header { text-align: center; margin-bottom: 2rem; }
+        .auth-id {
+            font-family: var(--font-mono); font-size: .72rem; letter-spacing: .28em;
+            color: var(--color-primary); opacity: .7; margin-bottom: .9rem;
+        }
+        .auth-icon {
+            font-size: 2.4rem; color: var(--color-primary);
+            filter: drop-shadow(0 0 10px var(--color-primary));
+            margin-bottom: .6rem; display: block;
+            animation: chipPulse 3s ease-in-out infinite;
+        }
+        .auth-title {
+            font-family: var(--font-head); font-size: clamp(1.6rem, 5vw, 2.1rem);
+            font-weight: 800; margin-bottom: .35rem;
+        }
+        .auth-sub {
+            font-family: var(--font-mono); font-size: .8rem;
+            color: var(--color-text-secondary); letter-spacing: .04em;
         }
 
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-            animation: float 20s infinite;
+        .auth-tabs {
+            display: flex; gap: .5rem; background: rgba(0,0,0,.25);
+            border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+            padding: .35rem; margin-bottom: 1.75rem;
         }
+        .auth-tab {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: .4rem;
+            padding: .65rem .5rem; border: none; border-radius: var(--radius-md);
+            background: transparent; color: var(--color-text-secondary);
+            font-family: var(--font-head); font-weight: 700; font-size: .78rem;
+            letter-spacing: .06em; text-transform: uppercase;
+            cursor: pointer; transition: all var(--transition-fast);
+        }
+        .auth-tab.active {
+            background: var(--gradient-primary); color: #060e14;
+            box-shadow: var(--glow-primary);
+        }
+        .auth-tab:hover:not(.active) { background: var(--color-hover); color: var(--color-primary); }
 
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
+        .auth-alert {
+            display: none; padding: .75rem 1rem; border-radius: var(--radius-md);
+            font-size: .85rem; margin-bottom: 1rem; font-family: var(--font-body);
+            animation: shake .4s ease;
         }
+        .auth-alert-error { background: rgba(255,77,106,.12); color: var(--color-error); border: 1px solid rgba(255,77,106,.3); }
+        .auth-alert-success { background: rgba(34,211,94,.12); color: var(--color-success); border: 1px solid rgba(34,211,94,.3); }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
 
-        .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 70%;
-            left: 80%;
-            animation-delay: 2s;
-        }
-
-        .shape:nth-child(3) {
-            width: 100px;
-            height: 100px;
-            top: 40%;
-            left: 5%;
-            animation-delay: 4s;
-        }
-
-        .shape:nth-child(4) {
-            width: 150px;
-            height: 150px;
-            top: 20%;
-            left: 85%;
-            animation-delay: 6s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-50px) rotate(180deg); }
-        }
-
-        .auth-container {
-            position: relative;
-            z-index: 1;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 450px;
-            padding: 50px 40px;
-            animation: slideUp 0.6s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo i {
-            font-size: 60px;
-            background: linear-gradient(135deg, #667eea, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: pulse 2s ease infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .logo h1 {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-top: 10px;
-        }
-
-        .logo p {
-            color: #666;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            background: #f0f0f0;
-            padding: 5px;
-            border-radius: 15px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #666;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, #667eea, #0072ff);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .tab-btn:hover:not(.active) {
-            background: #e0e0e0;
-        }
-
-        .form-content {
-            display: none;
-        }
-
-        .form-content.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; animation: fadeIn .35s ease; }
 
         .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
+            display: block; margin-bottom: .5rem; font-family: var(--font-head);
+            font-size: .78rem; letter-spacing: .05em; text-transform: uppercase;
+            color: var(--color-text-secondary); font-weight: 600;
+        }
+        .auth-input-wrap { position: relative; }
+        .auth-input-wrap i {
+            position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+            color: var(--color-text-secondary); font-size: .9rem; pointer-events: none;
+        }
+        .auth-input-wrap .form-control { padding-left: 2.7rem; }
+
+        .auth-submit { width: 100%; justify-content: center; margin-top: .5rem; }
+
+        .auth-visitor-copy {
+            color: var(--color-text-secondary); font-size: .9rem; line-height: 1.7;
+            text-align: center; margin-bottom: 1.5rem;
         }
 
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            transition: all 0.3s ease;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 14px 45px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #667eea, #0072ff);
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-visitor {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #667eea;
-            border-radius: 12px;
-            background: white;
-            color: #667eea;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-
-        .btn-visitor:hover {
-            background: linear-gradient(135deg, #667eea, #0072ff);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .error-message {
-            background: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .success-message {
-            background: #efe;
-            color: #3c3;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .footer-text {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 14px;
+        .auth-footer {
+            text-align: center; margin-top: 1.75rem; padding-top: 1.25rem;
+            border-top: 1px solid var(--color-border);
+            font-family: var(--font-mono); font-size: .72rem;
+            color: var(--color-text-secondary); letter-spacing: .05em;
         }
 
         @media (max-width: 480px) {
-            .auth-container {
-                padding: 40px 25px;
-            }
-
-            .logo h1 {
-                font-size: 26px;
-            }
+            .auth-pins span { width: 20px; }
+            .auth-tab { font-size: .68rem; padding: .6rem .3rem; gap: .25rem; }
+        }
+        @media (max-width: 360px) {
+            .auth-tab i { display: none; }
         }
     </style>
 </head>
-<body>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
+<body class="auth-page">
 
-    <div class="auth-container">
-        <div class="logo">
-            <i class="fas fa-user-circle"></i>
-            <h1>Sanmugavel B</h1>
-            <p>Full Stack Developer | AI Enthusiast</p>
-        </div>
+    <div class="auth-shell">
+        <div class="auth-card">
+            <div class="auth-pins" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('admin')">Admin Login</button>
-            <button class="tab-btn" onclick="switchTab('visitor')">Visitor Mode</button>
-        </div>
+            <div class="auth-header">
+                <span class="auth-id">ECE · MIT · AUTH MODULE</span>
+                <i class="fas fa-microchip auth-icon"></i>
+                <h1 class="auth-title gradient-text">Sanmugavel B</h1>
+                <p class="auth-sub">Full Stack Developer · AIoT &amp; Embedded Systems</p>
+            </div>
 
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
-
-        <!-- Admin Login Form -->
-        <div id="admin-form" class="form-content active">
-            <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <div class="input-wrapper">
-                        <input type="email" class="form-control" id="admin-email" required placeholder="Enter admin email">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Password</label>
-                    <div class="input-wrapper">
-                        <input type="password" class="form-control" id="admin-password" required placeholder="Enter password">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> Login as Admin
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" onclick="switchTab('admin')">
+                    <i class="fas fa-user-shield"></i> Admin Login
                 </button>
-            </form>
-        </div>
+                <button type="button" class="auth-tab" onclick="switchTab('visitor')">
+                    <i class="fas fa-eye"></i> Visitor Mode
+                </button>
+            </div>
 
-        <!-- Visitor Mode -->
-        <div id="visitor-form" class="form-content">
-            <p style="text-align: center; color: #666; margin-bottom: 20px;">
-                Browse my portfolio in read-only mode. You can view all my projects, experience, and skills!
-            </p>
-            <button onclick="enterVisitorMode()" class="btn-visitor">
-                <i class="fas fa-eye"></i> Enter as Visitor
-            </button>
-        </div>
+            <div id="error-message" class="auth-alert auth-alert-error"></div>
+            <div id="success-message" class="auth-alert auth-alert-success"></div>
 
-        <div class="footer-text">
-            © 2024 Sanmugavel B | All Rights Reserved
+            <!-- Admin Login Form -->
+            <div id="admin-form" class="auth-form active">
+                <form onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" class="form-control" id="admin-email" required placeholder="Enter admin email" autocomplete="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="auth-input-wrap">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" class="form-control" id="admin-password" required placeholder="Enter password" autocomplete="current-password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg auth-submit">
+                        <i class="fas fa-sign-in-alt"></i> Login as Admin
+                    </button>
+                </form>
+            </div>
+
+            <!-- Visitor Mode -->
+            <div id="visitor-form" class="auth-form">
+                <p class="auth-visitor-copy">
+                    Browse the portfolio in read-only mode — view every project, experience entry and skill, no login required.
+                </p>
+                <button type="button" onclick="enterVisitorMode()" class="btn btn-secondary btn-lg auth-submit">
+                    <i class="fas fa-eye"></i> Enter as Visitor
+                </button>
+            </div>
+
+            <div class="auth-footer">© 2026 Sanmugavel B · All Rights Reserved</div>
         </div>
     </div>
 
     <script>
-        const ADMIN_EMAIL = 'sanmugavelbl@gmail.com';
-        const ADMIN_PASSWORD = 'Sanmugavel#1';
-
         function switchTab(tab) {
             const adminForm = document.getElementById('admin-form');
             const visitorForm = document.getElementById('visitor-form');
-            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabBtns = document.querySelectorAll('.auth-tab');
 
             if (tab === 'admin') {
                 adminForm.classList.add('active');
@@ -434,7 +238,7 @@
 
         function handleAdminLogin(event) {
             event.preventDefault();
-            
+
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
 
@@ -445,10 +249,10 @@
                     name: 'Sanmugavel B',
                     loginTime: new Date().toISOString()
                 };
-                
+
                 localStorage.setItem('portfolioUser', JSON.stringify(user));
                 showSuccess('Login successful! Redirecting...');
-                
+
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 1500);
@@ -463,10 +267,10 @@
                 name: 'Guest',
                 loginTime: new Date().toISOString()
             };
-            
+
             localStorage.setItem('portfolioUser', JSON.stringify(user));
             showSuccess('Welcome! Redirecting to portfolio...');
-            
+
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1500);
