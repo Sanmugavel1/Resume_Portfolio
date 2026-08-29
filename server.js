@@ -508,7 +508,7 @@ app.listen(PORT, () => {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('');
     console.log('🔐 Admin Login:');
-    console.log('   Email: sanmugavelbl@gmail.com');
+    console.log('   Email: sanmugavelb1@gmail.com');
     console.log('   Password: Sanmugavel');
     console.log('');
     console.log('👤 Or click "Enter as Visitor" for read-only mode');

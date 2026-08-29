@@ -878,10 +878,10 @@ function deleteTimeline(id) {
 
 // ── PROFILE IMAGE ─────────────────────────────────────────────────
 function loadProfileImage() {
-  const saved=localStorage.getItem('profileImage');
+  const saved=portfolioData.profileImage;
   if(saved) {
     const ph=document.getElementById('profileImage');
-    if(ph) ph.innerHTML=`<img src="${saved}" alt="Profile Photo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`;
+    if(ph) ph.innerHTML=`<img src="${saved}" alt="Profile Photo" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">${currentUser && currentUser.role==='admin' ? `<button class="btn btn-primary btn-sm admin-only" onclick="uploadProfileImage()" style="position:absolute;bottom:1rem;left:50%;transform:translateX(-50%)"><i class="fas fa-camera"></i> Change Photo</button>` : ''}`;
   }
 }
 function uploadProfileImage() {
@@ -889,9 +889,11 @@ function uploadProfileImage() {
   input.onchange=e=>{
     const file=e.target.files[0]; if(!file) return;
     const reader=new FileReader();
-    reader.onload=ev=>{
-      localStorage.setItem('profileImage',ev.target.result);
-      loadProfileImage();
+    reader.onload=async ev=>{
+      try {
+        const r=await apiCall('/portfolio/profile-image','POST',{image:ev.target.result});
+        if(r.ok){ portfolioData.profileImage=ev.target.result; loadProfileImage(); }
+      } catch {}
     };
     reader.readAsDataURL(file);
   };
