@@ -11,7 +11,10 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://sanmugavelb1_db_us
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static(__dirname));
+// Frontend now deploys separately on Vercel (see /frontend) and talks to this
+// API cross-origin, so this service no longer serves any static files —
+// that also stops server.js (with its DB connection string) from being
+// downloadable straight off the live URL the way it was before.
 
 // MongoDB Schemas
 const portfolioSchema = new mongoose.Schema({
@@ -500,18 +503,12 @@ app.post('/api/portfolio/profile-image', async (req, res) => {
 // Start server
 app.listen(PORT, () => {
     console.log('');
-    console.log('🚀 Portfolio Server with MongoDB is running!');
+    console.log('🚀 Portfolio API (backend only) is running!');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log(`📱 Open your browser: http://localhost:${PORT}/login.html`);
     console.log(`📊 API Endpoint: http://localhost:${PORT}/api`);
     console.log(`💾 Database: MongoDB Atlas (Data persists forever!)`);
+    console.log(`🖥️  Frontend: deployed separately on Vercel, see /frontend`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('');
-    console.log('🔐 Admin Login:');
-    console.log('   Email: sanmugavelb1@gmail.com');
-    console.log('   Password: Sanmugavel');
-    console.log('');
-    console.log('👤 Or click "Enter as Visitor" for read-only mode');
     console.log('');
     console.log('Press Ctrl+C to stop the server');
     console.log('');
