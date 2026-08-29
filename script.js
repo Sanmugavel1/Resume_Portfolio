@@ -373,18 +373,30 @@ function renderOrganizations() {
 // ── TIMELINE (NEW) ───────────────────────────────────────────────
 function getDefaultTimeline() {
   return [
-    { id:'t1', year:'24 Sep 2005', title:'Born in Pudukkottai', description:'Started the journey in Pudukkottai, Tamil Nadu.', icon:'fas fa-baby', location:'Pudukkottai', type:'personal' },
-    { id:'t2', year:'2010 – 2012', title:'AVCC Schooling (1st–3rd)', description:'Early schooling at AVCC, Pudukkottai.', icon:'fas fa-school', location:'Pudukkottai', type:'education' },
-    { id:'t3', year:'2012 – 2014', title:'PARI Nursery School (4th–5th)', description:'Continued primary education.', icon:'fas fa-school', location:'Pudukkottai', type:'education' },
-    { id:'t4', year:'2016 – 2019', title:'NDHS Schooling (6th–8th)', description:'Developed interest in Science and Mathematics.', icon:'fas fa-graduation-cap', location:'Nagapattinam', type:'education' },
-    { id:'t5', year:'2019 – 2021', title:'SPV Schooling (9th–10th)', description:'Completed SSLC with strong academic performance.', icon:'fas fa-graduation-cap', location:'Nagapattinam', type:'education' },
-    { id:'t6', year:'2021 – 2023', title:'NHSS — Bio Maths Stream (11th–12th)', description:'Higher Secondary at National Higher Secondary School; strong foundation in Physics, Chemistry, Biology & Maths.', icon:'fas fa-book-open', location:'Nagapattinam', type:'education' },
-    { id:'t7', year:'2023', title:'Swimming & Athletics', description:'Active participation in swimming and track events during school years.', icon:'fas fa-swimming-pool', location:'Nagapattinam', type:'achievement' },
-    { id:'t8', year:'2024 – Present', title:'B.E. ECE @ MIT Anna University', description:'Pursuing B.E. Electronics & Communication Engineering at Madras Institute of Technology, Chennai. Semester highlights: SEM 1 — C Programming, Volunteering; SEM 2 — C++ & PersoFest\'23; SEM 3 — Java, DSA & Excellia\'24; SEM 4 — MERN Stack & PersoFest\'25.', icon:'fas fa-microchip', location:'Chennai', type:'education' },
-    { id:'t9', year:'Jan 2025', title:'Underwater Robotics — Kurukshetra\'25 Finalist', description:'Developed an underwater robot with IMU and ultrasonic sensors.', icon:'fas fa-robot', location:'CEG, Chennai', type:'achievement' },
-    { id:'t10', year:'Feb 2025', title:'National Project Expo Finalist — PERI', description:'Presented Underwater Submarine project at national level.', icon:'fas fa-trophy', location:'Chennai', type:'achievement' },
-    { id:'t11', year:'Mar 2025', title:'Sprintathon\'25 National Hackathon Finalist', description:'Implemented FPGA-based gunshot detection system.', icon:'fas fa-award', location:'National', type:'achievement' },
-    { id:'t12', year:'2025', title:'Web Development — MERN Stack', description:'Built SquadSync and multiple full-stack projects.', icon:'fas fa-laptop-code', location:'Chennai', type:'project' },
+    { id:'t1', year:'3 Nov 2006', title:'Born in Chennai', description:'Started the journey in Chennai, Tamil Nadu.', icon:'fas fa-baby', location:'Chennai', type:'personal' },
+    { id:'t2', year:'2012 – 2017', title:'Primary Schooling (1st – 5th)', description:'Studied at Sri Maharishi Vasudeva Vidyalaya, Chennai — built the basic fundamental knowledge base.', icon:'fas fa-school', location:'Chennai', type:'education' },
+    { id:'t3', year:'2017 – 2024', title:'Secondary & Higher Secondary (6th – 12th)', description:'Studied at Sri Ahobila Math Oriental Higher Secondary School, Chennai — developed soft skills including public speaking.', icon:'fas fa-graduation-cap', location:'Chennai', type:'education' },
+    { id:'t4', year:'2022', title:'School Second — 10th Std', description:'Scored school second place in the 10th std board exams.', icon:'fas fa-medal', location:'Chennai', type:'achievement' },
+    { id:'t5', year:'2024', title:'School First — 12th Std', description:'Scored school first place in the 12th std board exams.', icon:'fas fa-trophy', location:'Chennai', type:'achievement' },
+    { id:'t6', year:'2024 – Present', title:'B.E. ECE @ MIT Anna University', description:'Joined Madras Institute of Technology, Anna University for B.E. Electronics & Communication Engineering. Currently maintaining a 9.42 CGPA.', icon:'fas fa-microchip', location:'Chennai', type:'education' },
+    { id:'t7', year:'2024 – Present', title:'Faculty — T.M.V Tuition Centre', description:'Joined as a faculty member for TN State Board Higher Secondary, teaching Physics, Chemistry and Mathematics for Class 12.', icon:'fas fa-chalkboard-teacher', location:'West Mambalam, Chennai', type:'work' },
+    { id:'t8', year:'2024 – Present', title:'JEE Chemistry Faculty — Born To Win', description:'Joined as JEE/NEET Chemistry faculty at Sri Ahobila Math Oriental HSS, teaching through the alumni initiative "Born To Win".', icon:'fas fa-flask', location:'Chennai', type:'work' },
+    { id:'t9', year:'Jan 2025', title:'Underwater Welding Robot — Kurukshetra\'25 Finalist', description:'Developed an underwater robot with IMU (MPU6050) and ultrasonic sensors for stability and navigation.', icon:'fas fa-robot', location:'CEG, Chennai', type:'project' },
+    { id:'t10', year:'Feb 2025', title:'Underwater Submarine — PERI Project Expo\'25 Finalist', description:'Extended the welding robot into a submarine with pressure sensing and improved IMU fusion; national-level finalist.', icon:'fas fa-trophy', location:'Chennai', type:'project' },
+    { id:'t11', year:'Mar 2025', title:'Gunshot Detection using FPGA — Sprintathon\'25 Finalist', description:'Real-time gunshot detection using an INMP441 microphone array and FPGA-based DSP; national hackathon finalist.', icon:'fas fa-award', location:'National', type:'project' },
+    { id:'t12', year:'Sep 2025', title:'SIH-PS-Tracker', description:'Built a tracker for Smart India Hackathon problem-statement submissions with automated Telegram notifications.', icon:'fas fa-bell', location:'Chennai', type:'project' },
+    { id:'t13', year:'Nov 2025', title:'SquadSync — Smart Sharing Companion', description:'Built a shared-life companion web app (expenses, tasks, notes, polls) in 3 hours during the DevQuest college event.', icon:'fas fa-laptop-code', location:'Chennai', type:'project' },
+    { id:'t14', year:'Feb 2026', title:'CubeSat-ADCS Demo', description:'Low-cost CubeSat Attitude Determination & Control System prototype using ESP32, IMU, and a real-time 3D ground station.', icon:'fas fa-satellite', location:'Chennai', type:'project' },
+    { id:'t15', year:'Feb 2026', title:'FinGraph-Sentinel', description:'Graph-based financial-crime detection engine identifying money-muling rings via cycle detection and shell-network analysis.', icon:'fas fa-project-diagram', location:'Chennai', type:'project' },
+    { id:'t16', year:'Feb 2026', title:'CubeSat-ADCS V2', description:'Upgraded CubeSat ADCS with SDR-based LoRa communication, GNU Radio decoding, and 1-axis reaction wheel control.', icon:'fas fa-satellite-dish', location:'Chennai', type:'project' },
+    { id:'t17', year:'Apr 2026', title:'FHSS Communication System', description:'Built a Frequency-Hopping Spread Spectrum wireless link with Arduino + nRF24L01, visualized live in MATLAB.', icon:'fas fa-broadcast-tower', location:'Chennai', type:'project' },
+    { id:'t18', year:'May 2026', title:'CMN-Analyzer', description:'System-level analysis and visualization tool for Arm CMN-based architectures, detecting bottlenecks from VisualSim outputs.', icon:'fas fa-chart-line', location:'Chennai', type:'project' },
+    { id:'t19', year:'Jun 2026', title:'IoT-Ready Structural Health Monitoring', description:'Real-time tilt-detection system using Arduino Nano + MPU6050 with SAFE-WARNING-DANGER classification and a live dashboard.', icon:'fas fa-building', location:'Chennai', type:'project' },
+    { id:'t20', year:'Jun 2026', title:'CloudFlow-X — Satellite Temporal Interpolation', description:'AI Earth-observation platform reconstructing missing satellite imagery using optical-flow and deep interpolation models, for ISRO PS-12.', icon:'fas fa-satellite', location:'Chennai', type:'project' },
+    { id:'t21', year:'Jul 2026', title:'Quantum Sensor Fusion — Quant-A-Thon\'26', description:'Multi-sensor fusion & stealth-target detection pipeline combining classical ML with real QAOA quantum optimization on Qiskit Aer.', icon:'fas fa-atom', location:'Chennai', type:'project' },
+    { id:'t22', year:'Jul 2026', title:'AION — Organizational Nervous System', description:'Built a full organization-management platform with role-scoped dashboards, per-department AI agents, and a live knowledge graph.', icon:'fas fa-network-wired', location:'Chennai', type:'project' },
+    { id:'t23', year:'Aug 2026', title:'Drift-Sense — Semicon India Hackathon 2026', description:'Built a wafer/electron-beam localization showcase for Applied Materials PS-2, with a synthetic dataset generator and real benchmark evaluation dashboard.', icon:'fas fa-microchip', location:'Chennai', type:'project' },
+    { id:'t24', year:'Aug 2026', title:'Freelance Web Development — Webora', description:'Started building client demo websites (gyms, dental clinic, interior design studio, tuition centre) through freelance web-dev work.', icon:'fas fa-briefcase', location:'Chennai', type:'work' },
   ];
 }
 
@@ -395,7 +407,7 @@ function renderTimeline() {
     : getDefaultTimeline();
   if (!list.length) { c.innerHTML = '<div class="empty-state"><i class="fas fa-road"></i><p>No milestones yet</p></div>'; return; }
 
-  const typeColors = { education:'#0099ff', achievement:'#f5a623', personal:'#22d35e', project:'#00e5c8' };
+  const typeColors = { education:'#0099ff', achievement:'#f5a623', personal:'#22d35e', project:'#00e5c8', work:'#a78bfa' };
 
   c.innerHTML = `<div class="timeline-track">` +
     list.map((item, i)=>`
